@@ -60,7 +60,10 @@ const AiSuggestions = ({ data }) => {
     if (!data || Object.keys(data).length === 0) return;
     setLoading(true);
     try {
-      const res = await axiosInstance.post(API_PATHS.AI.GET_SUGGESTIONS, data);
+      const userId = localStorage.getItem("userId"); // ← get userId from storage
+      const res = await axiosInstance.post(API_PATHS.AI.GET_SUGGESTIONS, {
+        userId,
+      }); // ← send only userId
       const newAdvice = res.data.suggestions;
       setSuggestions(newAdvice);
       localStorage.setItem("spendora_ai_cache", newAdvice);
