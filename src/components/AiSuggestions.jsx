@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPath";
 
 const AiSuggestions = ({ data }) => {
@@ -57,30 +57,10 @@ const AiSuggestions = ({ data }) => {
   }, []);
 
   const fetchAiAdvice = useCallback(async () => {
-    // 💡 Step 1: Check standard string keys
-    let currentUserId = localStorage.getItem("userId");
-
-    // 💡 Step 2: Fallback to parsing the common 'user' storage object string
-    if (!currentUserId) {
-      try {
-        const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-        currentUserId = storedUser._id || storedUser.id;
-      } catch (e) {
-        console.error("Failed to parse local storage user key:", e);
-      }
-    }
-
-    // Guard clause to block invalid requests
-    if (!currentUserId) {
-      setSuggestions("Identity tracking missing. Please log out and log back in.");
-      return;
-    }
-
+    if (!data || Object.keys(data).length === 0) return;
     setLoading(true);
     try {
-      const res = await axiosInstance.post(API_PATHS.AI.GET_SUGGESTIONS, {
-        userId: currentUserId,
-      });
+      const res = await axiosInstance.post(API_PATHS.AI.GET_SUGGESTIONS, data);
       const newAdvice = res.data.suggestions;
       setSuggestions(newAdvice);
       localStorage.setItem("spendora_ai_cache", newAdvice);
@@ -96,7 +76,7 @@ const AiSuggestions = ({ data }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [data]);
 
   return (
     <div className="p-4 bg-linear-to-r from-violet-50 to-white rounded-2xl border border-violet-100 shadow-sm">
@@ -105,6 +85,7 @@ const AiSuggestions = ({ data }) => {
           ✨ finTRACK Ai
         </h3>
 
+        {/* Voice selector — attractive pill buttons */}
         <div
           style={{
             display: "flex",
@@ -186,6 +167,7 @@ const AiSuggestions = ({ data }) => {
           )}
         </div>
 
+        {/* Speak button */}
         {suggestions && !loading && (
           <button
             onClick={speakAdvice}
