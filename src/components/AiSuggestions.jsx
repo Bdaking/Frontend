@@ -57,13 +57,18 @@ const AiSuggestions = ({ data }) => {
   }, []);
 
   const fetchAiAdvice = useCallback(async () => {
-    if (!data || Object.keys(data).length === 0) return;
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      setSuggestions("Identity tracking missing. Please log in again.");
+      return;
+    }
+
     setLoading(true);
     try {
-      const userId = localStorage.getItem("userId"); // ← get userId from storage
       const res = await axiosInstance.post(API_PATHS.AI.GET_SUGGESTIONS, {
         userId,
-      }); // ← send only userId
+      });
       const newAdvice = res.data.suggestions;
       setSuggestions(newAdvice);
       localStorage.setItem("spendora_ai_cache", newAdvice);
@@ -79,7 +84,7 @@ const AiSuggestions = ({ data }) => {
     } finally {
       setLoading(false);
     }
-  }, [data]);
+  }, []); // 💡 Removed dependency on data since the backend polls the DB directly
 
   return (
     <div className="p-4 bg-linear-to-r from-violet-50 to-white rounded-2xl border border-violet-100 shadow-sm">
