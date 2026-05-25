@@ -1,4 +1,5 @@
 export const BASE_URL = "https://backend-one-ruddy-85.vercel.app";
+
 export const API_PATHS = {
   AUTH: {
     LOGIN: "/api/v1/auth/login",
@@ -29,6 +30,7 @@ export const API_PATHS = {
   },
   AI: {
     GET_SUGGESTIONS: "/api/v1/ai/suggestions",
-    CHAT: "/api/ai/chat",
+    // 💡 FIXED: Aligned perfectly to your backend's endpoint route mapping
+    CHAT: "/api/v1/ai-chat",
   },
 };
