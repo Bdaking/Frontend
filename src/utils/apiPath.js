@@ -30,7 +30,6 @@ export const API_PATHS = {
   },
   AI: {
     GET_SUGGESTIONS: "/api/v1/ai/suggestions",
-    // 💡 FIXED: Aligned perfectly to your backend's endpoint route mapping
-    CHAT: "/api/v1/ai-chat",
+    CHAT: "/api/v1/ai/chat",
   },
 };
