@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import axiosInstance from "../../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPath";
 
 const AiSuggestions = ({ data }) => {
