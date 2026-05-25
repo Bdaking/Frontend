@@ -6,13 +6,18 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Dashboard/Home";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
+import Notes from "./pages/Dashboard/Notes";
+
 import UserProvider from "./context/userContext";
 import { Toaster } from "react-hot-toast";
+import AiChat from "./pages/Dashboard/AiChat";
+import Receipts from "./components/Receipts/Receipts";
 const App = () => {
   return (
     <UserProvider>
@@ -20,16 +25,19 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Root />} />
-            <Route path="/login" exact element={<Login />} />
-            <Route path="/signUp" exact element={<SignUp />} />
-            <Route path="/dashboard" exact element={<Home />} />
-            <Route path="/income" exact element={<Income />} />
-            <Route path="/expense" exact element={<Expense />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signUp" element={<SignUp />} />
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/income" element={<Income />} />
+            <Route path="/expense" element={<Expense />} />
+            <Route path="/notes" element={<Notes />} />
+            <Route path="/ai-chat" element={<AiChat />} />
+            <Route path="/receipts" element={<Receipts />} />
           </Routes>
         </Router>
+
         <Toaster
           toastOptions={{
-            className: "",
             style: {
               fontSize: "13px",
             },
@@ -43,9 +51,10 @@ const App = () => {
 export default App;
 
 const Root = () => {
-  //Check if token exists in localStorage
+  // Check if token exists in localStorage
   const isAuthenticated = !!localStorage.getItem("token");
-  //Redirect to dashboard if authenticated,otherwise to login
+
+  // Redirect based on authentication
   return isAuthenticated ? (
     <Navigate to="/dashboard" />
   ) : (

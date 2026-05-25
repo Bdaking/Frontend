@@ -3,7 +3,7 @@ import { useUserAuth } from "../../hooks/useUserAuth";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useState } from "react";
 import { API_PATHS } from "../../utils/apiPath";
-import axiosInstance from "../../utils/axiosinstance";
+import axiosInstance from "../../utils/axiosInstance";
 import ExpenseOverview from "../../components/Expense/ExpenseOverview";
 import AddExpenseForm from "../../components/Expense/AddExpenseForm";
 import Modal from "../../components/Modal";
@@ -20,11 +20,9 @@ const Expense = () => {
     show: false,
     data: null,
   });
-
   const [openAddExpenseModal, setOpenAddExpenseModal] = useState(false);
 
-  //Get All expense details
-
+  // Get All expense details
   const fetchExpenseDetails = async () => {
     if (loading) return;
     setLoading(true);
@@ -33,9 +31,7 @@ const Expense = () => {
         `${API_PATHS.EXPENSE.GET_ALL_EXPENSE}`,
       );
       console.log("Transmitter (API) Payload:", response.data);
-
       const actualData = response.data?.data || response.data || [];
-
       setExpenseData(actualData);
     } catch (error) {
       console.error("Signal Path Error:", error);
@@ -43,22 +39,19 @@ const Expense = () => {
       setLoading(false);
     }
   };
-  //handle add expense
+
+  // Handle add expense
   const handleAddExpense = async (expense) => {
     const { category, amount, date, icon } = expense;
 
-    // Validation Checks
     if (!category.trim()) {
       toast.error("Form hi fill up vek phawt roh.");
       return;
     }
-
-    // FIX: Use proper comparison operator (<= 0) instead of => 0
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
       toast.error("Zat hi 0 aia tam nambar dik a ni tur a ni.");
       return;
     }
-
     if (!date) {
       toast.error("Ni dah a ngai");
       return;
@@ -71,11 +64,8 @@ const Expense = () => {
         date,
         icon,
       });
-
       setOpenAddExpenseModal(false);
       toast.success("Expense dah luh a ni tawh e");
-
-      // Trigger a fresh fetch of data
       fetchExpenseDetails();
     } catch (error) {
       console.error(
@@ -84,7 +74,8 @@ const Expense = () => {
       );
     }
   };
-  //Delete Expense
+
+  // Delete Expense
   const deleteExpense = async (id) => {
     try {
       await axiosInstance.delete(API_PATHS.EXPENSE.DELETE_EXPENSE(id));
@@ -99,16 +90,19 @@ const Expense = () => {
     }
   };
 
-  //handle download expense details
+  // FIX: Override Accept header so server returns binary, not JSON
   const handleDownloadExpenseDetails = async () => {
     try {
       const response = await axiosInstance.get(
         API_PATHS.EXPENSE.DOWNLOAD_EXPENSE,
         {
           responseType: "blob",
+          headers: {
+            Accept:
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          },
         },
       );
-      //Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -119,13 +113,12 @@ const Expense = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading expense details:", error);
-      toast.error("Failed to download expense details. Please try agaon.");
+      toast.error("Failed to download expense details. Please try again.");
     }
   };
 
   useEffect(() => {
     fetchExpenseDetails();
-
     return () => {};
   }, []);
 

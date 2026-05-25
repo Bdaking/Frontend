@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import axiosInstance from "../utils/axiosinstance";
+import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPath";
 
 const AiSuggestions = ({ data }) => {
@@ -9,7 +9,7 @@ const AiSuggestions = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [voiceType, setVoiceType] = useState("female"); // State for gender version
+  const [voiceType, setVoiceType] = useState("female");
 
   useEffect(() => {
     if (cooldown > 0) {
@@ -18,20 +18,15 @@ const AiSuggestions = ({ data }) => {
     }
   }, [cooldown]);
 
-  // --- Voice Selection Logic (Mobile Software Component) ---
   const speakAdvice = () => {
     if (!suggestions) return;
-
     if (isSpeaking) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
       return;
     }
-
     const utterance = new SpeechSynthesisUtterance(suggestions);
     const voices = window.speechSynthesis.getVoices();
-
-    // Logic to find a specific voice based on common OS naming conventions
     const selectedVoice = voices.find((v) => {
       if (voiceType === "male") {
         return (
@@ -49,18 +44,14 @@ const AiSuggestions = ({ data }) => {
         );
       }
     });
-
     if (selectedVoice) utterance.voice = selectedVoice;
     utterance.rate = 0.9;
-
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
-
     window.speechSynthesis.speak(utterance);
   };
 
-  // Ensure voices are loaded early (Asynchronous behavior in browsers)
   useEffect(() => {
     window.speechSynthesis.getVoices();
   }, []);
@@ -91,22 +82,73 @@ const AiSuggestions = ({ data }) => {
     <div className="p-4 bg-linear-to-r from-violet-50 to-white rounded-2xl border border-violet-100 shadow-sm">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-sm font-bold text-primary flex items-center gap-2">
-          ✨ Spendora Ai
+          ✨ finTRACK Ai
         </h3>
 
-        {/* Voice Version Selector */}
-        <div className="flex bg-violet-100 rounded-lg p-1 gap-1 border border-violet-200">
+        {/* Voice selector — attractive pill buttons */}
+        <div
+          style={{
+            display: "flex",
+            gap: 6,
+            background: "#f3f4f6",
+            borderRadius: 999,
+            padding: "4px",
+            border: "1px solid #e5e7eb",
+          }}
+        >
           <button
             onClick={() => setVoiceType("female")}
-            className={`text-[9px] px-2 py-1 rounded transition-all ${voiceType === "female" ? "bg-white shadow-sm text-primary font-bold" : "text-gray-500"}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              padding: "5px 12px",
+              borderRadius: 999,
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.7rem",
+              fontWeight: 700,
+              transition: "all 0.2s",
+              background:
+                voiceType === "female"
+                  ? "linear-gradient(135deg, #ec4899, #f472b6)"
+                  : "transparent",
+              color: voiceType === "female" ? "#fff" : "#9ca3af",
+              boxShadow:
+                voiceType === "female"
+                  ? "0 2px 8px rgba(236,72,153,0.35)"
+                  : "none",
+              letterSpacing: "0.02em",
+            }}
           >
-            👩 Female
+            <span style={{ fontSize: "0.85rem" }}>♀</span> Female
           </button>
           <button
             onClick={() => setVoiceType("male")}
-            className={`text-[9px] px-2 py-1 rounded transition-all ${voiceType === "male" ? "bg-white shadow-sm text-primary font-bold" : "text-gray-500"}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              padding: "5px 12px",
+              borderRadius: 999,
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.7rem",
+              fontWeight: 700,
+              transition: "all 0.2s",
+              background:
+                voiceType === "male"
+                  ? "linear-gradient(135deg, #3b82f6, #60a5fa)"
+                  : "transparent",
+              color: voiceType === "male" ? "#fff" : "#9ca3af",
+              boxShadow:
+                voiceType === "male"
+                  ? "0 2px 8px rgba(59,130,246,0.35)"
+                  : "none",
+              letterSpacing: "0.02em",
+            }}
           >
-            👨 Male
+            <span style={{ fontSize: "0.85rem" }}>♂</span> Male
           </button>
         </div>
       </div>
@@ -115,27 +157,47 @@ const AiSuggestions = ({ data }) => {
         <div className="flex-1">
           {loading ? (
             <div className="space-y-2">
-              <div className="h-2 w-3/4 bg-violet-200 animate-pulse rounded"></div>
-              <div className="h-2 w-1/2 bg-violet-100 animate-pulse rounded"></div>
+              <div className="h-2 w-3/4 bg-violet-200 animate-pulse rounded" />
+              <div className="h-2 w-1/2 bg-violet-100 animate-pulse rounded" />
             </div>
           ) : (
             <p className="text-xs text-gray-600 italic whitespace-pre-line leading-relaxed">
-              {suggestions || "Ready to analyze your February 2026 spending."}
+              {suggestions || "Ready to analyze your spending."}
             </p>
           )}
         </div>
 
-        {/* Main Voice Trigger */}
+        {/* Speak button */}
         {suggestions && !loading && (
           <button
             onClick={speakAdvice}
-            className={`text-[10px] p-2 rounded-full transition-all shadow-sm flex items-center justify-center ${
-              isSpeaking
-                ? "bg-red-500 text-white animate-pulse"
-                : "bg-primary text-white hover:bg-violet-700"
-            }`}
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: "50%",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "0.9rem",
+              flexShrink: 0,
+              transition: "all 0.2s",
+              background: isSpeaking
+                ? "linear-gradient(135deg,#ef4444,#f87171)"
+                : voiceType === "female"
+                  ? "linear-gradient(135deg,#ec4899,#f472b6)"
+                  : "linear-gradient(135deg,#3b82f6,#60a5fa)",
+              boxShadow: isSpeaking
+                ? "0 3px 10px rgba(239,68,68,0.4)"
+                : voiceType === "female"
+                  ? "0 3px 10px rgba(236,72,153,0.4)"
+                  : "0 3px 10px rgba(59,130,246,0.4)",
+              animation: isSpeaking ? "pulse 1s infinite" : "none",
+            }}
+            title={isSpeaking ? "Stop" : "Listen"}
           >
-            {isSpeaking ? "🛑" : "🔊"}
+            {isSpeaking ? "⏹" : "🔊"}
           </button>
         )}
       </div>

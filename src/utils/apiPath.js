@@ -1,7 +1,4 @@
-export const BASE_URL = "http://localhost:5000";
-
-//utils/apiPaths.js
-
+export const BASE_URL = "https://backend-one-ruddy-85.vercel.app";
 export const API_PATHS = {
   AUTH: {
     LOGIN: "/api/v1/auth/login",
@@ -30,8 +27,8 @@ export const API_PATHS = {
     SUBMIT: "/api/v1/feedback",
     GET_ALL: "/api/v1/feedback",
   },
-  // NEW: AI Path added correctly
   AI: {
     GET_SUGGESTIONS: "/api/v1/ai/suggestions",
+    CHAT: "/api/ai/chat",
   },
 };

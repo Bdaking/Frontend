@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import IncomeOverview from "../../components/income/IncomeOverview";
-import axiosInstance from "../../utils/axiosinstance";
+import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPath";
 import Modal from "../../components/Modal";
 import AddIncomeForm from "../../components/income/AddIncomeForm";
@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 import IncomeList from "../../components/income/IncomeList";
 import DeleteAlert from "../../components/DeleteAlert";
 import { useUserAuth } from "../../hooks/useUserAuth";
+
 const Income = () => {
   useUserAuth();
   const [incomeData, setIncomeData] = useState([]);
@@ -17,11 +18,9 @@ const Income = () => {
     show: false,
     data: null,
   });
-
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
 
-  //Get All income details
-
+  // Get All income details
   const fetchIncomeDetails = async () => {
     if (loading) return;
     setLoading(true);
@@ -30,9 +29,7 @@ const Income = () => {
         `${API_PATHS.INCOME.GET_ALL_INCOME}`,
       );
       console.log("Transmitter (API) Payload:", response.data);
-
       const actualData = response.data?.data || response.data || [];
-
       setIncomeData(actualData);
     } catch (error) {
       console.error("Signal Path Error:", error);
@@ -40,22 +37,19 @@ const Income = () => {
       setLoading(false);
     }
   };
-  //handle income
+
+  // Handle add income
   const handleAddIncome = async (income) => {
     const { source, amount, date, icon } = income;
 
-    // Validation Checks
     if (!source.trim()) {
       toast.error("Form hi fill up vek phawt roh.");
       return;
     }
-
-    // FIX: Use proper comparison operator (<= 0) instead of => 0
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
       toast.error("Zat hi 0 aia tam nambar dik a ni tur a ni.");
       return;
     }
-
     if (!date) {
       toast.error("Ni hi dah a ngai");
       return;
@@ -68,11 +62,8 @@ const Income = () => {
         date,
         icon,
       });
-
       setOpenAddIncomeModal(false);
       toast.success("Income dah luh a ni tawh e");
-
-      // Trigger a fresh fetch of data
       fetchIncomeDetails();
     } catch (error) {
       console.error(
@@ -82,7 +73,7 @@ const Income = () => {
     }
   };
 
-  //Delete Income
+  // Delete Income
   const deleteIncome = async (id) => {
     try {
       await axiosInstance.delete(API_PATHS.INCOME.DELETE_INCOME(id));
@@ -97,16 +88,19 @@ const Income = () => {
     }
   };
 
-  //handle download income details
+  // FIX: Override Accept header so server returns binary, not JSON
   const handleDownloadIncomeDetails = async () => {
     try {
       const response = await axiosInstance.get(
         API_PATHS.INCOME.DOWNLOAD_INCOME,
         {
           responseType: "blob",
+          headers: {
+            Accept:
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          },
         },
       );
-      //Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -117,7 +111,7 @@ const Income = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading income details:", error);
-      toast.error("Failed to download income details. Please try agaon.");
+      toast.error("Failed to download income details. Please try again.");
     }
   };
 
