@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths"; // Imported to fix the endpoints
 import { MdDeleteOutline } from "react-icons/md";
 
 // Inline styles to avoid Tailwind conflicts for the new design
@@ -311,19 +312,21 @@ const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
 
+  // Fixed: Replaced hardcoded string path with configuration object path
   const fetchNotes = async () => {
     try {
-      const response = await axiosInstance.get("/get-all-notes");
+      const response = await axiosInstance.get(API_PATHS.NOTES.GET_ALL_NOTES);
       setNotes(response.data);
     } catch (err) {
       console.error("Failed to fetch notes:", err);
     }
   };
 
+  // Fixed: Replaced hardcoded string path with configuration object path
   const addNote = async () => {
     if (!newNote.trim()) return;
     try {
-      await axiosInstance.post("/add-note", { text: newNote });
+      await axiosInstance.post(API_PATHS.NOTES.ADD_NOTE, { text: newNote });
       setNewNote("");
       fetchNotes();
     } catch (err) {
@@ -331,9 +334,10 @@ const Notes = () => {
     }
   };
 
+  // Fixed: Correctly utilizes the dynamic functional path variable mapping the ID parameter
   const deleteNote = async (id) => {
     try {
-      await axiosInstance.delete(`/delete-note/${id}`);
+      await axiosInstance.delete(API_PATHS.NOTES.DELETE_NOTE(id));
       fetchNotes();
     } catch (err) {
       console.error("Failed to delete note:", err);
@@ -366,8 +370,7 @@ const Notes = () => {
             </div>
           )}
         </div>
-
-        {/* Composer */}
+        /* Composer */
         <div className="composer-card">
           <div className="composer-label">New reminder</div>
           <textarea
@@ -388,7 +391,6 @@ const Notes = () => {
             </button>
           </div>
         </div>
-
         {/* Notes Grid or Empty State */}
         {notes.length === 0 ? (
           <div className="empty-state">
