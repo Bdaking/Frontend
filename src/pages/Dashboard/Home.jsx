@@ -344,7 +344,7 @@ const Home = () => {
         <div className="dash-hero">
           <div className="dash-hero-left">
             <div className="dash-greeting">👋 {getGreeting()}</div>
-            <h1 className="dash-hero-title">Welcome back, Mala!</h1>
+            <h1 className="dash-hero-title">Welcome back!</h1>
             <p className="dash-hero-sub">
               Here's a snapshot of your finances. Track your income, expenses,
               and stay on top of your budget.
