@@ -11,7 +11,6 @@ import { IoMdCard } from "react-icons/io";
 import { addThousandsSeparator } from "../../utils/helper";
 import FinanceOverview from "../../components/Dashboard/FinanceOverview";
 import Last30DaysExpense from "../../components/Dashboard/Last30DaysExpense";
-import AiSuggestions from "../../components/AiSuggestions";
 
 const dashStyles = `
   *, *::before, *::after { box-sizing: border-box; }
@@ -21,11 +20,78 @@ const dashStyles = `
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1rem 0.875rem 3rem;
+    padding: 1.5rem 0.875rem 3rem;
     overflow-x: hidden;
   }
   @media (min-width: 768px) {
-    .dash-root { padding: 1.75rem 2rem 3rem; }
+    .dash-root { padding: 2rem 2rem 3rem; }
+  }
+
+  /* ── HERO HEADER ── */
+  .dash-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 768px) {
+    .dash-hero { margin-bottom: 2rem; align-items: center; }
+  }
+
+  .dash-hero-left {}
+
+  .dash-greeting {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6366f1;
+    margin-bottom: 4px;
+  }
+  @media (min-width: 768px) { .dash-greeting { font-size: 0.78rem; } }
+
+  .dash-hero-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin: 0 0 6px;
+  }
+  @media (min-width: 768px) { .dash-hero-title { font-size: 1.9rem; } }
+
+  .dash-hero-sub {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.5;
+    max-width: 380px;
+  }
+  @media (min-width: 768px) { .dash-hero-sub { font-size: 0.82rem; } }
+
+  .dash-hero-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #94a3b8;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+  @media (min-width: 768px) { .dash-hero-date { font-size: 0.76rem; padding: 8px 16px; } }
+
+  .dash-hero-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+    flex-shrink: 0;
   }
 
   /* ── STATS ── */
@@ -71,7 +137,6 @@ const dashStyles = `
   .dash-stat:nth-child(1):hover { box-shadow: 0 10px 28px rgba(109,40,217,0.5); }
   .dash-stat:nth-child(2):hover { box-shadow: 0 10px 28px rgba(4,120,87,0.5); }
   .dash-stat:nth-child(3):hover { box-shadow: 0 10px 28px rgba(185,28,28,0.5); }
-  /* decorative circle */
   .dash-stat::before {
     content: ''; position: absolute;
     top: -20px; right: -20px;
@@ -84,7 +149,6 @@ const dashStyles = `
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* icon + label row */
   .dash-stat-top {
     display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
   }
@@ -98,7 +162,6 @@ const dashStyles = `
     .dash-stat-icon { width: 42px; height: 42px; font-size: 1.25rem; border-radius: 12px; }
   }
 
-  /* ── LABEL: clearly readable ── */
   .dash-stat-label {
     font-size: 0.65rem; font-weight: 800;
     letter-spacing: 0.1em; text-transform: uppercase;
@@ -107,7 +170,6 @@ const dashStyles = `
   @media (min-width: 480px) { .dash-stat-label { font-size: 0.72rem; } }
   @media (min-width: 768px) { .dash-stat-label { font-size: 0.9rem; } }
 
-  /* ── VALUE: big and bold ── */
   .dash-stat-value {
     font-family: 'JetBrains Mono', monospace;
     font-size: 1.1rem; font-weight: 800; color: #fff;
@@ -118,7 +180,6 @@ const dashStyles = `
   @media (min-width: 400px) { .dash-stat-value { font-size: 1.3rem; } }
   @media (min-width: 768px) { .dash-stat-value { font-size: 2.1rem; } }
 
-  /* bottom progress bar accent */
   .dash-stat-bar {
     height: 3px; border-radius: 99px;
     background: rgba(255,255,255,0.3);
@@ -222,14 +283,6 @@ const dashStyles = `
     letter-spacing: 0.04em; flex-shrink: 0;
   }
   .collapsible-body { border-top: 1px solid #f1f5f9; }
-  .collapsible-sub-label {
-    padding: 14px 16px 6px;
-    font-size: 11px; font-weight: 700;
-    color: #64748b; text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  @media (min-width: 768px) {
-    .collapsible-sub-label { padding: 16px 20px 8px; font-size: 12px; }
-  }
 
   .dash-feedback-inner {
     padding: 1.25rem 1rem;
@@ -238,6 +291,24 @@ const dashStyles = `
   @media (min-width: 768px) { .dash-feedback-inner { padding: 2.5rem 2rem; } }
   .dash-feedback-inner > * { width: 100%; max-width: 520px; }
 `;
+
+// Helper to get greeting based on time of day
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good Morning";
+  if (hour < 17) return "Good Afternoon";
+  return "Good Evening";
+};
+
+// Helper to format today's date
+const getTodayLabel = () => {
+  return new Date().toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 const Home = () => {
   useUserAuth();
@@ -269,33 +340,23 @@ const Home = () => {
     <DashboardLayout activeMenu="Dashboard">
       <style>{dashStyles}</style>
       <div className="dash-root">
-        {/* 1. AI INSIGHTS */}
-        <div className="dash-content" style={{ marginBottom: "1.25rem" }}>
-          <div className="dash-section-label">AI Insights</div>
-          <div className="dash-card">
-            {dashboardData ? (
-              <AiSuggestions
-                data={{
-                  totalIncome: dashboardData.totalIncome,
-                  totalExpense: dashboardData.totalExpense,
-                  transactions: dashboardData.recentTransactions,
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  padding: "1.25rem",
-                  color: "#9ca3af",
-                  fontSize: "0.82rem",
-                }}
-              >
-                Loading AI insights...
-              </div>
-            )}
+        {/* ── HERO HEADER ── */}
+        <div className="dash-hero">
+          <div className="dash-hero-left">
+            <div className="dash-greeting">👋 {getGreeting()}</div>
+            <h1 className="dash-hero-title">Welcome back, Mala!</h1>
+            <p className="dash-hero-sub">
+              Here's a snapshot of your finances. Track your income, expenses,
+              and stay on top of your budget.
+            </p>
+          </div>
+          <div className="dash-hero-date">
+            <span className="dash-hero-dot" />
+            {getTodayLabel()}
           </div>
         </div>
 
-        {/* 2. STATS */}
+        {/* 1. STATS */}
         <div className="dash-stats">
           <div className="dash-stat">
             <div className="dash-stat-top">
@@ -335,7 +396,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* 3. CONTENT */}
+        {/* 2. CONTENT */}
         <div className="dash-content">
           {/* Quick nav — Income & Expense */}
           <div className="dash-section-label">Recent Activity</div>

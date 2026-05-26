@@ -1,4 +1,8 @@
-export const BASE_URL = "https://backend-one-ruddy-85.vercel.app";
+// Automatically switch backend URLs based on environment
+export const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://backend-nine-pi-23.vercel.app";
 
 export const API_PATHS = {
   AUTH: {
@@ -29,7 +33,6 @@ export const API_PATHS = {
     GET_ALL: "/api/v1/feedback",
   },
   AI: {
-    GET_SUGGESTIONS: "/api/v1/ai/suggestions",
-    CHAT: "/api/v1/ai/chat",
+    CHAT: "/api/v1/ai-chat/chat",
   },
 };
