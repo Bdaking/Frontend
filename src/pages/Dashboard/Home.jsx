@@ -211,6 +211,12 @@ const dashStyles = `
     overflow: hidden;
     animation: cardIn 0.5s ease both;
     width: 100%; min-width: 0;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .dash-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
   }
   @keyframes cardIn {
     from { opacity: 0; transform: translateY(8px); }
@@ -358,6 +364,7 @@ const Home = () => {
 
         {/* 1. STATS */}
         <div className="dash-stats">
+          {/* Balance — not clickable */}
           <div className="dash-stat">
             <div className="dash-stat-top">
               <div className="dash-stat-icon balance">
@@ -370,7 +377,13 @@ const Home = () => {
             </div>
             <div className="dash-stat-bar" />
           </div>
-          <div className="dash-stat">
+
+          {/* Income — clickable */}
+          <div
+            className="dash-stat"
+            onClick={() => navigate("/income")}
+            style={{ cursor: "pointer" }}
+          >
             <div className="dash-stat-top">
               <div className="dash-stat-icon income">
                 <LuWalletMinimal />
@@ -382,7 +395,13 @@ const Home = () => {
             </div>
             <div className="dash-stat-bar" />
           </div>
-          <div className="dash-stat">
+
+          {/* Expense — clickable */}
+          <div
+            className="dash-stat"
+            onClick={() => navigate("/expense")}
+            style={{ cursor: "pointer" }}
+          >
             <div className="dash-stat-top">
               <div className="dash-stat-icon expense">
                 <LuHandCoins />
@@ -401,27 +420,33 @@ const Home = () => {
           {/* Quick nav — Income & Expense */}
           <div className="dash-section-label">Recent Activity</div>
           <div className="dash-two-col">
-            <div className="dash-card">
+            <div className="dash-card" onClick={() => navigate("/income")}>
               <div className="quick-nav-card">
                 <span className="quick-nav-title">
                   Pawisa lak luhna te (income)
                 </span>
                 <button
                   className="quick-nav-btn"
-                  onClick={() => navigate("/income")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/income");
+                  }}
                 >
                   See All
                 </button>
               </div>
             </div>
-            <div className="dash-card">
+            <div className="dash-card" onClick={() => navigate("/expense")}>
               <div className="quick-nav-card">
                 <span className="quick-nav-title">
                   Pawisa hmanna te (expense)
                 </span>
                 <button
                   className="quick-nav-btn"
-                  onClick={() => navigate("/expense")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/expense");
+                  }}
                 >
                   See All
                 </button>
@@ -429,8 +454,11 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Collapsible More Details */}
-          <div className="dash-card" style={{ animationDelay: "0.1s" }}>
+          {/* Collapsible More Details — not clickable as a whole */}
+          <div
+            className="dash-card"
+            style={{ cursor: "default", animationDelay: "0.1s" }}
+          >
             <button
               className="collapsible-header"
               onClick={() => setMoreOpen((p) => !p)}
