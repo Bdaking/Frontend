@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths"; // Imported to fix the endpoints
+import { API_PATHS } from "../../utils/apiPath";
 import { MdDeleteOutline } from "react-icons/md";
 
 // Inline styles to avoid Tailwind conflicts for the new design
