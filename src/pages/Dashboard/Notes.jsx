@@ -312,7 +312,6 @@ const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
 
-  // Fixed: Replaced hardcoded string path with configuration object path
   const fetchNotes = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.NOTES.GET_ALL_NOTES);
@@ -322,7 +321,6 @@ const Notes = () => {
     }
   };
 
-  // Fixed: Replaced hardcoded string path with configuration object path
   const addNote = async () => {
     if (!newNote.trim()) return;
     try {
@@ -334,7 +332,6 @@ const Notes = () => {
     }
   };
 
-  // Fixed: Correctly utilizes the dynamic functional path variable mapping the ID parameter
   const deleteNote = async (id) => {
     try {
       await axiosInstance.delete(API_PATHS.NOTES.DELETE_NOTE(id));
@@ -370,7 +367,9 @@ const Notes = () => {
             </div>
           )}
         </div>
-        /* Composer */
+
+        {/* Fixed: Wrapped the comment in JSX curly braces to fix Vercel compilation crash */}
+        {/* Composer */}
         <div className="composer-card">
           <div className="composer-label">New reminder</div>
           <textarea
@@ -391,6 +390,7 @@ const Notes = () => {
             </button>
           </div>
         </div>
+
         {/* Notes Grid or Empty State */}
         {notes.length === 0 ? (
           <div className="empty-state">
