@@ -35,4 +35,10 @@ export const API_PATHS = {
   AI: {
     CHAT: "/api/v1/ai-chat/chat",
   },
+  // Add this section right here
+  NOTES: {
+    ADD_NOTE: "/api/v1/notes/add",
+    GET_ALL_NOTES: "/api/v1/notes",
+    DELETE_NOTE: (noteId) => `/api/v1/notes/${noteId}`,
+  },
 };
